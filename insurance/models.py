@@ -88,3 +88,93 @@ class ClientPhysical(models.Model):
     firstname = models.CharField(verbose_name="Имя", max_length=50)
     lastname = models.CharField(verbose_name="Фамилия", max_length=50)
     middlename = models.CharField(verbose_name="Отчество", max_length=50)
+
+
+class Product(models.Model):
+    name = models.CharField(verbose_name="Наименование", max_length=255)
+
+
+class Group(models.Model):
+    name = models.CharField(verbose_name="Наименование", max_length=255)
+
+
+class Klass(models.Model):
+    name = models.CharField(verbose_name="Наименование", max_length=255)
+
+
+class Bank(models.Model):
+    name = models.CharField(verbose_name="Наименование", max_length=255)
+    mfo = models.CharField(verbose_name="МФО банка", max_length=8)
+    inn = models.CharField(verbose_name="ИНН", max_length=10)
+    address = models.CharField(verbose_name="Адрес", max_length=150)
+    phone_number = models.CharField(verbose_name="Номер телефона", max_length=15)
+    checking_account = models.CharField(verbose_name="Расчётный счёт", max_length=30)
+
+
+class Branch(models.Model):
+    name = models.CharField(verbose_name="Наименование", max_length=255)
+    director = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+
+
+class Currency(models.Model):
+    name = models.CharField(verbose_name="Наименование", max_length=50)
+    code = models.CharField(verbose_name="Код валюты", max_length=4)
+
+
+class BasicTariffRate(models.Model):
+    name = models.CharField(verbose_name="Наименование", max_length=255)
+    sum = models.BigIntegerField(verbose_name="Сумма")
+
+
+class Beneficiary(models.Model):
+    name = models.CharField(verbose_name="Наименование", max_length=255)
+
+
+class InsurancePeriod(models.Model):
+    date_from = models.DateField()
+    date_to = models.DateField(null=True, blank=True)
+
+
+class LegalClient(models.Model):
+    name = models.CharField(verbose_name="Наименование", max_length=255)
+    address = models.CharField(verbose_name="Адрес", max_length=150)
+    phone_number = models.CharField(verbose_name="Номер телефона", max_length=15)
+
+
+class IndividualClient(models.Model):
+    first_name = models.CharField(verbose_name="Имя", max_length=255)
+    last_name = models.CharField(verbose_name="Фамилия", max_length=255)
+    middle_name = models.CharField(verbose_name="Отчество", max_length=255)
+    address = models.CharField(verbose_name="Адрес", max_length=150)
+    phone_number = models.CharField(verbose_name="Номер телефона", max_length=15)
+
+
+class CompanyBankAccount(models.Model):
+    bank = models.ForeignKey(Bank, on_delete=models.SET_NULL)
+    name = models.CharField(verbose_name="Наименование", max_length=255)
+    address = models.CharField(verbose_name="Адрес", max_length=150)
+    phone_number = models.CharField(verbose_name="Номер телефона", max_length=15)
+    checking_account = models.CharField(verbose_name="Расчётный счёт", max_length=30)
+
+
+class InsuranceContract(models.Model):
+    contract_number = models.IntegerField(verbose_name="Номер договора")  # TODO: make unsigned
+    contract_date = models.DateTimeField(verbose_name="Дата договора")  # TODO: discuss
+    # region = models.ForeignKey(Region, on_delete=models.SET_NULL)  TODO: fix
+    client_id = models.BigIntegerField()    # TODO: make unsigned
+    client_type = models.CharField(verbose_name="Тип клиента", max_length=1)
+    # client_checking_account = models.CharField(verbose_name="Расчётный счёт клиента", max_length=30)  TODO: discuss
+    # beneficiary = models.ForeignKey(Beneficiary, verbose_name="Выгодоприобретатель", on_delete=models.SET_NULL)  TODO: discuss
+    # pledger = models.ForeignKey(Pledger, verbose_name="Залогодатель", on_delete=models.SET_NULL)  TODO: discuss
+    user = models.ForeignKey(User, on_delete=models.SET_NULL)
+    loan_agreement = models.CharField(verbose_name="Кредитный договор", max_length=150)
+    property_name = models.CharField(verbose_name="Имя имущества", max_length=100)
+    quantity = models.IntegerField(verbose_name="Количество")  # TODO: discuss
+    insurance_cost = models.BigIntegerField(verbose_name="Страховая стоимость")  # TODO: discuss
+    insurance_sum = models.BigIntegerField(verbose_name="Страховая сумма")  # TODO: discuss
+    date_from = models.DateField()
+    date_to = models.DateField(null=True, blank=True)
+    franchise = models.CharField(verbose_name="Франшиза", max_length=100)
+    original = models.TextField()  # TODO: change to Jsonb field
+
+

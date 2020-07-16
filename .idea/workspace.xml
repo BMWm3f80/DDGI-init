@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fdc6de7c-8cb0-4ba4-8aa6-bc4f92e48f81" name="Default Changelist" comment="First commit">
-      <change beforePath="$PROJECT_DIR$/.idea/DDGI.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/DDGI.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/insurance/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/insurance/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,6 +93,7 @@
       <workItem from="1594051132633" duration="6818000" />
       <workItem from="1594743755626" duration="547000" />
       <workItem from="1594750257629" duration="595000" />
+      <workItem from="1594822622817" duration="1759000" />
     </task>
     <servers />
   </component>
@@ -110,5 +109,9 @@
       <screen x="1920" y="312" width="1366" height="768" />
     </state>
     <state x="2092" y="343" width="1022" height="737" key="SettingsEditor/1920.312.1366.768/0.339.1920.741@1920.312.1366.768" timestamp="1594743813499" />
+    <state x="2266" y="401" width="672" height="678" key="search.everywhere.popup" timestamp="1594822994606">
+      <screen x="1920" y="312" width="1366" height="768" />
+    </state>
+    <state x="2266" y="401" width="672" height="678" key="search.everywhere.popup/1920.312.1366.768/0.339.1920.741@1920.312.1366.768" timestamp="1594822994606" />
   </component>
 </project>
