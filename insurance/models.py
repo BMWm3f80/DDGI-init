@@ -175,6 +175,38 @@ class InsuranceContract(models.Model):
     date_from = models.DateField()
     date_to = models.DateField(null=True, blank=True)
     franchise = models.CharField(verbose_name="Франшиза", max_length=100)
+    # installment_date = models.SmallIntegerField(verbose_name="Дата взносов")  TODO: discuss
     original = models.TextField()  # TODO: change to Jsonb field
 
+
+class Policy(models.Model):
+    contract = models.ForeignKey(InsuranceContract, on_delete=models.SET_NULL)
+    contract_number = models.IntegerField(verbose_name="Номер договора")  # TODO: make unsigned
+    property_name = models.CharField(verbose_name="Имя имущества", max_length=100)
+    # insurance_place = models.ForeignKey(Region, on_delete=models.SET_NULL)  TODO: fix
+    loan_agreement = models.CharField(verbose_name="Кредитный договор", max_length=150)
+    quantity = models.IntegerField(verbose_name="Количество")  # TODO: discuss
+    insurance_case = models.CharField(verbose_name="Страховой случае", max_length=100)
+    insurance_sum = models.BigIntegerField(verbose_name="Страховая сумма")  # TODO: discuss
+    franchise = models.CharField(verbose_name="Франшиза", max_length=100)
+    total_prize = models.BigIntegerField(verbose_name=" Общая страховая премия")  # TODO: discuss
+    paid_insurance_prize = models.BigIntegerField(verbose_name="Оплаченная страховая премия")  # TODO: discuss
+    date_from = models.DateField()
+    date_to = models.DateField(null=True, blank=True)
+    policy_date = models.DateField(verbose_name="Дата полиса")
+    issue_date = models.DateField(verbose_name="Дата выдачи")
+    # manager = models.ForeignKey(Beneficiary, verbose_name="Директор", on_delete=models.SET_NULL)  TODO: discuss
+    original = models.TextField()  # TODO: change to Jsonb field
+
+
+class Transaction(models.Model):
+    client_id = models.BigIntegerField()    # TODO: make unsigned
+    client_type = models.CharField(verbose_name="Тип клиента", max_length=1)
+    bank = models.ForeignKey(Bank, on_delete=models.SET_NULL)
+    sum = models.BigIntegerField(verbose_name="Сумма")
+    time = models.DateField(auto_now_add=True)
+    bank_checking_account = models.ForeignKey(CompanyBankAccount, verbose_name="Расчётный счёт", on_delete=models.SET_NULL)
+    client_checking_account = models.CharField(verbose_name="Расчётный счёт клиента", max_length=30)
+    contract = models.ForeignKey(InsuranceContract, on_delete=models.SET_NULL)
+    comments = models.TextField()   # TODO: discuss about jsonb
 
