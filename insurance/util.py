@@ -1,4 +1,4 @@
-from insurance.models import UserRole, PermissionUser, Permission, PermissionRole, Role
+from insurance.models import UserRole, PermissionUser, Permission, PermissionRole, Role, Profile
 from insurance import serializers
 
 
@@ -11,4 +11,10 @@ def is_granted(user, permission_code_name):
 
 def get_user_roles(user):
     serializer = serializers.UserRoleSerializer()
+    return serializer.data
+
+
+def get_user_profile(user):
+    profile = Profile.objects.get(user=user)
+    serializer = serializers.ProfileSerializer(profile)
     return serializer.data

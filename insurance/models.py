@@ -23,6 +23,7 @@ class Profile(models.Model):
     image = models.ImageField(verbose_name='Фото', upload_to='users', null=True, blank=True)
     passport = models.CharField(verbose_name='Паспорт', max_length=50, null=True, blank=True)
 
+
     def __str__(self):
         return self.user.username
 
@@ -150,7 +151,7 @@ class IndividualClient(models.Model):
 
 
 class CompanyBankAccount(models.Model):
-    bank = models.ForeignKey(Bank, on_delete=models.SET_NULL)
+    bank = models.ForeignKey(Bank, on_delete=models.SET_NULL, null=True, blank=True)
     name = models.CharField(verbose_name="Наименование", max_length=255)
     address = models.CharField(verbose_name="Адрес", max_length=150)
     phone_number = models.CharField(verbose_name="Номер телефона", max_length=15)
@@ -166,7 +167,7 @@ class InsuranceContract(models.Model):
     # client_checking_account = models.CharField(verbose_name="Расчётный счёт клиента", max_length=30)  TODO: discuss
     # beneficiary = models.ForeignKey(Beneficiary, verbose_name="Выгодоприобретатель", on_delete=models.SET_NULL)  TODO: discuss
     # pledger = models.ForeignKey(Pledger, verbose_name="Залогодатель", on_delete=models.SET_NULL)  TODO: discuss
-    user = models.ForeignKey(User, on_delete=models.SET_NULL)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     loan_agreement = models.CharField(verbose_name="Кредитный договор", max_length=150)
     property_name = models.CharField(verbose_name="Имя имущества", max_length=100)
     quantity = models.IntegerField(verbose_name="Количество")  # TODO: discuss
@@ -180,7 +181,7 @@ class InsuranceContract(models.Model):
 
 
 class Policy(models.Model):
-    contract = models.ForeignKey(InsuranceContract, on_delete=models.SET_NULL)
+    contract = models.ForeignKey(InsuranceContract, on_delete=models.SET_NULL, null=True, blank=True)
     contract_number = models.IntegerField(verbose_name="Номер договора")  # TODO: make unsigned
     property_name = models.CharField(verbose_name="Имя имущества", max_length=100)
     # insurance_place = models.ForeignKey(Region, on_delete=models.SET_NULL)  TODO: fix
@@ -202,12 +203,12 @@ class Policy(models.Model):
 class Transaction(models.Model):
     client_id = models.BigIntegerField()    # TODO: make unsigned
     client_type = models.CharField(verbose_name="Тип клиента", max_length=1)
-    bank = models.ForeignKey(Bank, on_delete=models.SET_NULL)
+    bank = models.ForeignKey(Bank, on_delete=models.SET_NULL, null=True, blank=True)
     sum = models.BigIntegerField(verbose_name="Сумма")
     time = models.DateField(auto_now_add=True)
-    bank_checking_account = models.ForeignKey(CompanyBankAccount, verbose_name="Расчётный счёт", on_delete=models.SET_NULL)
+    bank_checking_account = models.ForeignKey(CompanyBankAccount, verbose_name="Расчётный счёт", on_delete=models.SET_NULL, null=True, blank=True)
     client_checking_account = models.CharField(verbose_name="Расчётный счёт клиента", max_length=30)
-    contract = models.ForeignKey(InsuranceContract, on_delete=models.SET_NULL)
+    contract = models.ForeignKey(InsuranceContract, on_delete=models.SET_NULL, null=True, blank=True)
     comments = models.TextField()   # TODO: discuss about jsonb
 
 
