@@ -210,3 +210,22 @@ class Transaction(models.Model):
     contract = models.ForeignKey(InsuranceContract, on_delete=models.SET_NULL)
     comments = models.TextField()   # TODO: discuss about jsonb
 
+
+class Form(models.Model):
+    # beneficiary = models.ForeignKey(Beneficiary, verbose_name="Выгодоприобретатель", on_delete=models.SET_NULL)  TODO: discuss
+    # form_type = models.ForeignKey(FormType)
+    date_from = models.DateField()
+    date_to = models.DateField(null=True, blank=True)
+    property_name = models.CharField(verbose_name="Имя имущества", max_length=100)
+    client_id = models.BigIntegerField()    # TODO: make unsigned
+    client_type = models.CharField(verbose_name="Тип клиента", max_length=1)
+    # client_checking_account = models.CharField(verbose_name="Расчётный счёт клиента", max_length=30)  TODO: discuss
+    # region = models.ForeignKey(Region, on_delete=models.SET_NULL)  TODO: fix
+    quantity = models.IntegerField(verbose_name="Количество")  # TODO: discuss
+    insurance_cost = models.BigIntegerField(verbose_name="Страховая стоимость")  # TODO: discuss
+    insurance_sum = models.BigIntegerField(verbose_name="Страховая сумма")  # TODO: discuss
+    anti_fire_stuff = models.SmallIntegerField(verbose_name="Наличие пожарной сигнализации и средств пожаротушения")
+    security_stuff = models.SmallIntegerField(verbose_name="Наличие охранной сигнализации и средств защиты")
+    payment_type = models.CharField(verbose_name="Вид оплаты", max_length=1)
+    payment_currency = models.CharField(verbose_name="Валюта оплаты", max_length=4)
+    insurer = models.ForeignKey(User, verbose_name="Страхователь", on_delete=models.SET_NULL)
