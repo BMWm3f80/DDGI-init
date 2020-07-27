@@ -47,6 +47,7 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -94,7 +95,8 @@
       <workItem from="1594743755626" duration="547000" />
       <workItem from="1594750257629" duration="595000" />
       <workItem from="1594822622817" duration="1759000" />
-      <workItem from="1594918056513" duration="2803000" />
+      <workItem from="1594918056513" duration="3112000" />
+      <workItem from="1595148116038" duration="1465000" />
     </task>
     <servers />
   </component>
