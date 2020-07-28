@@ -229,4 +229,4 @@ class Form(models.Model):
     security_stuff = models.SmallIntegerField(verbose_name="Наличие охранной сигнализации и средств защиты")
     payment_type = models.CharField(verbose_name="Вид оплаты", max_length=1)
     payment_currency = models.CharField(verbose_name="Валюта оплаты", max_length=4)
-    insurer = models.ForeignKey(User, verbose_name="Страхователь", on_delete=models.SET_NULL)
+    insurer = models.ForeignKey(User, verbose_name="Страхователь", on_delete=models.SET_NULL, null=True, blank=True)
