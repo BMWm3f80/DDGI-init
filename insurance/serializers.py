@@ -15,9 +15,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         # Add extra responses here
         data['userdata'] = util.get_user_profile(self.user)
         data['roles'] = util.get_user_roles(self.user)
-        data['permissions'] = util.get_user_permissions(self.user)
+        data['groups'] = self.user.groups.values_list('name', flat=True)
         return data
-
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -26,11 +25,9 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserRoleSerializer(serializers.ModelSerializer):
-    role_title = serializers.CharField(source="role.title")
-
     class Meta:
         model = UserRole
-        fields = ('role_title',)
+        fields = '__all__'
 
 
 class PositionSerializer(serializers.ModelSerializer):
@@ -40,79 +37,26 @@ class PositionSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    position = PositionSerializer()
     first_name = serializers.CharField(source="user.first_name")
     last_name = serializers.CharField(source="user.last_name")
     email = serializers.CharField(source="user.email")
-    position_name = serializers.CharField(source="position")
-    is_active = serializers.BooleanField(source="user.is_active")
-    is_superuser = serializers.BooleanField(source="user.is_superuser")
-    last_login = serializers.DateTimeField(source="user.last_login", format="%d.%m.%Y %H:%M:%S")
 
     class Meta:
         model = Profile
-        fields = ('id',
-                  'first_name',
-                  'last_name',
-                  'email',
-                  'position_name',
-                  'middle_name',
-                  'is_active',
-                  'is_superuser',
-                  'last_login')
+        fields = ('id', 'first_name', 'last_name', 'email', 'position', 'middle_name')
 
 
 class PermissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Permission
-        fields = '__all__'
-
-
-class PermissionUserSerializer(serializers.ModelSerializer):
-    permission_code = serializers.CharField(source="permission.code_name")
-    class Meta:
-        model = PermissionUser
-        fields = ('permission_code', 'grant')
-
+        fields = ('id', 'code_name', 'title')
 
 
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Role
         fields = ('id', 'title', 'is_active')
-
-
-class GridColSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = GridCols
-        fields = ['title',
-                  'data',
-                  'name',
-                  'type',
-                  'width',
-                  'searchable',
-                  'orderable',
-                  'className',
-                  'defaultContent',
-                  'visible']
-
-
-class DtOptionSerializer(serializers.ModelSerializer):
-    columns = GridColSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Dt_Option
-        fields = ['codeName', 'title', 'dataPath', 'draw',
-                  'keys', 'colReorder', 'fixedHeader', 'responsive',
-                  'autoFill', 'serverSide', 'processing', 'scrollY', 'columns']
-
-class IndividualClientSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = IndividualClient
-        fields = '__all__'
-
-
-
-
 
 
 
