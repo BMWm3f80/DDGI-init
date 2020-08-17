@@ -149,6 +149,9 @@ class IndividualClient(models.Model):
     address = models.CharField(verbose_name="Адрес", max_length=150)
     phone_number = models.CharField(verbose_name="Номер телефона", max_length=15)
 
+    def __str__(self):
+        return self.phone_number
+
 
 class CompanyBankAccount(models.Model):
     bank = models.ForeignKey(Bank, on_delete=models.SET_NULL, null=True, blank=True)
@@ -230,3 +233,43 @@ class Form(models.Model):
     payment_type = models.CharField(verbose_name="Вид оплаты", max_length=1)
     payment_currency = models.CharField(verbose_name="Валюта оплаты", max_length=4)
     insurer = models.ForeignKey(User, verbose_name="Страхователь", on_delete=models.SET_NULL, null=True, blank=True)
+
+
+class Dt_Option(models.Model):
+    codeName = models.CharField(max_length=128, unique=True)
+    title = models.CharField(max_length=512, null=True, blank=True)
+    dataPath = models.CharField(max_length=512, null=True, blank=True)
+    draw = models.IntegerField(default=1, null=True, blank=True)
+    keys = models.BooleanField(default=True)
+    colReorder = models.BooleanField(default=True)
+    fixedHeader = models.BooleanField(default=True)
+    responsive = models.BooleanField(default=True)
+    autoFill = models.BooleanField(default=True)
+    serverSide = models.BooleanField(default=True)
+    processing = models.BooleanField(default=True)
+    scrollY = models.CharField(max_length=128, default='70vh')
+
+    def __str__(self):
+        return self.codeName
+
+
+class GridCols(models.Model):
+    table = models.ForeignKey(Dt_Option, on_delete=models.CASCADE, related_name='columns', null=True, blank=True)
+    title = models.CharField(max_length=256, null=True, blank=True)
+    data = models.CharField(max_length=128, null=True, blank=True)
+    name = models.CharField(max_length=128, null=True, blank=True)
+    type = models.CharField(max_length=128, null=True, blank=True)
+    width = models.IntegerField(null=True, blank=True)
+    searchable = models.BooleanField(default=True)
+    orderable = models.BooleanField(default=True)
+    className = models.CharField(max_length=128, null=True, blank=True)
+    defaultContent = models.CharField(max_length=1024, null=True, blank=True)
+    visible = models.BooleanField(default=True)
+    order_num = models.IntegerField(null=True, blank=True)
+
+    class Meta:
+        ordering = ['order_num']
+
+    def __str__(self):
+        return self.title
+    
