@@ -42,6 +42,11 @@ class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
 
+    def get_queryset(self):
+       # print(json.loads(self.request.query_params.get('filter_param'))["status"])
+        queryset = Profile.objects.all()
+        return queryset
+
 
 class PermissionViewSet(viewsets.ModelViewSet):
     queryset = Permission.objects.all()
@@ -51,3 +56,18 @@ class PermissionViewSet(viewsets.ModelViewSet):
 class RoleViewSet(viewsets.ModelViewSet):
     queryset = Role.objects.all()
     serializer_class = RoleSerializer
+
+
+class GridViewSet(viewsets.ModelViewSet):
+    queryset = Dt_Option.objects.all()
+    serializer_class = DtOptionSerializer
+
+    def create(self, request, *args, **kwargs):
+        grid = Dt_Option.objects.get(codeName=request.data['gridCodeName'])
+        serializer = DtOptionSerializer(grid, read_only=True)
+        return Response(serializer.data)
+
+
+class IndividualClientViewSet(viewsets.ModelViewSet):
+    queryset = IndividualClient.objects.all()
+    serializer_class = IndividualClientSerializer

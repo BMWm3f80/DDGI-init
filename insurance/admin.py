@@ -95,4 +95,20 @@ class PermissionUserAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 
+class GridColsInline(admin.TabularInline):
+    model = GridCols
+    extra = 0
+    fields = ('order_num', 'title', 'data', 'name', 'type', 'className', 'defaultContent',
+              'width', 'searchable', 'orderable', 'visible')
+
+
+@admin.register(Dt_Option)
+class GridAdmin(admin.ModelAdmin):
+    list_display = ('codeName', 'title')
+    inlines = [GridColsInline]
+
+
+@admin.register(IndividualClient)
+class IndividualClientAdmin(admin.ModelAdmin):
+    pass
 
