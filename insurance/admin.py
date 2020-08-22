@@ -10,8 +10,23 @@ class ProfileInline(admin.StackedInline):
     fk_name = 'user'
 
 
+class UserRoleInline(admin.TabularInline):
+    model = UserRole
+    verbose_name_plural = 'Roles'
+    fk_name = 'user'
+    extra = 0
+
+
+
+class PermissionUserInline(admin.TabularInline):
+    model = PermissionUser
+    verbose_name_plural = 'Permissions'
+    fk_name = 'user'
+    extra = 0
+
+
 class CustomUserAdmin(UserAdmin):
-    inlines = (ProfileInline, )
+    inlines = (ProfileInline, UserRoleInline, PermissionUserInline)
 
     def get_inline_instances(self, request, obj=None):
         if not obj:
@@ -41,15 +56,24 @@ class PermissionAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 
+class PermissionRoleInline(admin.TabularInline):
+    model = PermissionRole
+    fk_name = 'role'
+    verbose_name_plural = 'ROLE PERMISSIONS'
+    verbose_name = 'PERMISSION'
+    extra = 0
+
+
 @admin.register(Role)
 class RoleAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('title', 'is_active')
+    inlines = (PermissionRoleInline, )
 
 
 @admin.register(UserRole)
 class UserRoleAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'role')
-    readonly_fields = ('cr_by', 'cr_on')
+    #readonly_fields = ('cr_by', 'cr_on')
 
     def save_model(self, request, obj, form, change):
         if change:
@@ -64,6 +88,11 @@ class UserRoleAdmin(admin.ModelAdmin):
                                           cr_by=request.user)
         super().save_model(request, obj, form, change)
 
+    def delete_model(self, request, obj):
+        permission_ids = PermissionRole.objects.filter(role=obj.role).values_list('permission_id')
+        PermissionUser.objects.filter(user=obj.user, permission__in=permission_ids).delete()
+        obj.delete()
+
     def delete_queryset(self, request, queryset):
         for obj in queryset:
             permission_ids = PermissionRole.objects.filter(role=obj.role).values_list('permission_id')
@@ -71,9 +100,11 @@ class UserRoleAdmin(admin.ModelAdmin):
             obj.delete()
 
 
+
 @admin.register(PermissionRole)
 class PermissionRoleAdmin(admin.ModelAdmin):
-    list_display = ('role', 'permission', 'role')
+    list_display = ('role', 'permission')
+
 
     def save_model(self, request, obj, form, change):
         if change:

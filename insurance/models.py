@@ -66,6 +66,8 @@ class UserRole(models.Model):
         return '{} - {}'.format(self.user.username, self.role.title)
 
 
+
+
 class PermissionRole(models.Model):
     role = models.ForeignKey(Role, on_delete=models.CASCADE)
     permission = models.ForeignKey(Permission, on_delete=models.CASCADE)
