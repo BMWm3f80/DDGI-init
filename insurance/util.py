@@ -10,11 +10,18 @@ def is_granted(user, permission_code_name):
 
 
 def get_user_roles(user):
-    serializer = serializers.UserRoleSerializer()
+    userroles = UserRole.objects.filter(user=user)
+    serializer = serializers.UserRoleSerializer(userroles, many=True, read_only=True)
     return serializer.data
 
 
 def get_user_profile(user):
     profile = Profile.objects.get(user=user)
     serializer = serializers.ProfileSerializer(profile)
+    return serializer.data
+
+
+def get_user_permissions(user):
+    userpermissions = PermissionUser.objects.filter(user=user, grant=True)
+    serializer = serializers.PermissionUserSerializer(userpermissions, many=True, read_only=True)
     return serializer.data

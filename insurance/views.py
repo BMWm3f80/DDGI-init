@@ -21,7 +21,7 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 
 class PositionsViewSet(viewsets.ModelViewSet):
-    #permission_classes = [IsAuthenticated, ]
+    permission_classes = [IsAuthenticated, ]
     queryset = Position.objects.all()
     serializer_class = PositionSerializer
 
@@ -39,15 +39,40 @@ class PositionsViewSet(viewsets.ModelViewSet):
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, ]
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
 
+    def get_queryset(self):
+       # print(json.loads(self.request.query_params.get('filter_param'))["status"])
+        queryset = Profile.objects.all()
+        return queryset
+
 
 class PermissionViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, ]
     queryset = Permission.objects.all()
     serializer_class = PermissionSerializer
 
 
 class RoleViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, ]
     queryset = Role.objects.all()
     serializer_class = RoleSerializer
+
+
+class GridViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, ]
+    queryset = Dt_Option.objects.all()
+    serializer_class = DtOptionSerializer
+
+    def create(self, request, *args, **kwargs):
+        grid = Dt_Option.objects.get(codeName=request.data['gridCodeName'])
+        serializer = DtOptionSerializer(grid, read_only=True)
+        return Response(serializer.data)
+
+
+class IndividualClientViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, ]
+    queryset = IndividualClient.objects.all()
+    serializer_class = IndividualClientSerializer
