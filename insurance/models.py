@@ -208,7 +208,7 @@ class PolicyRegistration(models.Model):
     policy_number_to = models.SmallIntegerField(verbose_name="Номер полиса до")
     policy_quantity = models.SmallIntegerField(verbose_name="Количество полисво")
     policy_status = models.SmallIntegerField(verbose_name="Статус полиса")
-    life = models.CharField(verbose_name="Документ")
+    file = models.CharField(verbose_name="Документ")
 #
 #
 # class Transaction(models.Model):
