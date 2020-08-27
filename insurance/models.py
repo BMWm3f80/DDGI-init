@@ -201,14 +201,22 @@ class IndividualClient(models.Model):
 #     # manager = models.ForeignKey(Beneficiary, verbose_name="Директор", on_delete=models.SET_NULL)  TODO: discuss
 #     original = models.TextField()  # TODO: change to Jsonb field
 
-class PolicyRegistration(models.Model):
-    act_number: models.CharField(verbose_nmae="Номер акта")
-    act_date: models.CharField(verbose_nmae="Дата акта")
-    policy_number_from = models.SmallIntegerField(verbose_name="Номер полиса с")
-    policy_number_to = models.SmallIntegerField(verbose_name="Номер полиса до")
-    policy_quantity = models.SmallIntegerField(verbose_name="Количество полисво")
-    policy_status = models.SmallIntegerField(verbose_name="Статус полиса")
-    life = models.CharField(verbose_name="Документ")
+
+class RegisteredPolises(models.Model):
+    act_number = models.CharField(verbose_name="Номер акта")
+    act_date = models.CharField(verbose_name="Дата акта")
+    polis_number_from = models.IntegerField(verbose_name="Номер полиса с")
+    polis_number_to = models.IntegerField(verbose_name="Номер полиса до")
+    polis_quantity = models.IntegerField(verbose_name="Количество полисво")
+    polis_status = models.SmallIntegerField(verbose_name="Статус полиса")
+    document = models.FileField(verbose_name="Документ", upload_to='registered_polis')
+
+    class Meta:
+        verbose_name_plural = 'Зарегистрированные полисы'
+        verbose_name = 'зарегистрированный полис'
+
+    def __str__(self):
+        return '{} {}'.format(self.act_number, self.act_date)
 #
 #
 # class Transaction(models.Model):
