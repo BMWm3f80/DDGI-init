@@ -9,6 +9,7 @@ router.register('profile', viewset=views.ProfileViewSet)
 router.register('permission', viewset=views.PermissionViewSet)
 router.register('grid', viewset=views.GridViewSet)
 router.register('individual', viewset=views.IndividualClientViewSet)
+router.register('registered-polises', viewset=views.RegisterPoliseViewSet)
 
 
 urlpatterns = [

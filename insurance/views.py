@@ -67,12 +67,48 @@ class GridViewSet(viewsets.ModelViewSet):
     serializer_class = DtOptionSerializer
 
     def create(self, request, *args, **kwargs):
-        grid = Dt_Option.objects.get(codeName=request.data['gridCodeName'])
-        serializer = DtOptionSerializer(grid, read_only=True)
-        return Response(serializer.data)
+        if Dt_Option.objects.filter(codeName=request.data['gridCodeName']).exists():
+            grid = Dt_Option.objects.get(codeName=request.data['gridCodeName'])
+            serializer = DtOptionSerializer(grid, read_only=True)
+            return Response(serializer.data)
 
 
 class IndividualClientViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, ]
     queryset = IndividualClient.objects.all()
     serializer_class = IndividualClientSerializer
+
+
+class RegisterPoliseViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, ]
+    queryset = RegisteredPolises.objects.all()
+    serializer_class = RegisteredPoliseSerializer
+
+    def create(self, request, *args, **kwargs):
+        response = {}
+        print(self.request.data)
+        try:
+            if self.request.data['action'] == 'add':
+                params = self.request.data['params']
+                RegisteredPolises.objects.create(
+                    act_number=params['act_number'],
+                    act_date=params['act_date'],
+                    polis_number_from=params['polis_number_from'],
+                    polis_number_to=params['polis_number_to'],
+                    polis_quantity=params['polis_quantity'],
+                    polis_status=params['polis_status'],
+
+                    cr_by=self.request.user
+                ).save()
+                response['success'] = True
+            elif self.request.data['action'] == 'get':
+                item_id = self.request.data['pk']
+                item = RegisteredPolises.objects.get(id=item_id)
+                serializer = RegisteredPoliseSerializer(item)
+                response['data'] = serializer.data
+        except Exception as e:
+            print(e)
+            response['success'] = False
+            response['error_msg'] = str(e)
+        return Response(response)
+

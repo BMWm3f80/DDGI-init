@@ -105,10 +105,19 @@ class DtOptionSerializer(serializers.ModelSerializer):
                   'keys', 'colReorder', 'fixedHeader', 'responsive',
                   'autoFill', 'serverSide', 'processing', 'scrollY', 'columns']
 
+
 class IndividualClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = IndividualClient
         fields = '__all__'
+
+
+class RegisteredPoliseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RegisteredPolises
+        fields = ['id', 'act_number', 'act_date', 'polis_number_from',
+                  'polis_number_to', 'polis_quantity', 'polis_status',
+                  'document']
 
 
 

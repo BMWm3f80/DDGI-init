@@ -143,3 +143,7 @@ class GridAdmin(admin.ModelAdmin):
 class IndividualClientAdmin(admin.ModelAdmin):
     pass
 
+
+@admin.register(RegisteredPolises)
+class RegisteredPolises(admin.ModelAdmin):
+    pass

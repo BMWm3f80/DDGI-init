@@ -203,13 +203,15 @@ class IndividualClient(models.Model):
 
 
 class RegisteredPolises(models.Model):
-    act_number = models.CharField(verbose_name="Номер акта")
-    act_date = models.CharField(verbose_name="Дата акта")
+    act_number = models.CharField(verbose_name="Номер акта", max_length=128)
+    act_date = models.CharField(verbose_name="Дата акта", max_length=128)
     polis_number_from = models.IntegerField(verbose_name="Номер полиса с")
     polis_number_to = models.IntegerField(verbose_name="Номер полиса до")
     polis_quantity = models.IntegerField(verbose_name="Количество полисво")
     polis_status = models.SmallIntegerField(verbose_name="Статус полиса")
     document = models.FileField(verbose_name="Документ", upload_to='registered_polis')
+    cr_on = models.DateTimeField(auto_now_add=True)
+    cr_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'Зарегистрированные полисы'
