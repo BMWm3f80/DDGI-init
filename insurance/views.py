@@ -361,6 +361,7 @@ class BranchViewSet(viewsets.ModelViewSet):
             elif self.request.data['action'] == 'delete':
                 item_id = self.request.data['id']
                 Branch.objects.filter(id=item_id).update(
+                    up_by=self.request.user,
                     is_exist=False
                 )
         except Exception as e:
@@ -371,6 +372,45 @@ class BranchViewSet(viewsets.ModelViewSet):
 
 class LegalClientViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, ]
-    queryset = Lega
+    queryset = LegalClient.objects.filter(is_exist=True)
+    serializer_class = LegalClientSerializer
+
+    def create(self, request, *args, **kwargs):
+        response = {}
+        try:
+            if self.request.data['action'] == 'create':
+                params = self.request.data['params']
+                LegalClient.objects.create(
+                    name=params['name'],
+                    address=params['address'],
+                    phone_number=params['phone_number']
+                ).save()
+                response['success'] = True
+            elif self.request.data['action'] == 'get':
+                item_id = self.request.data['id']
+                item = LegalClient.objects.get(id=item_id)
+                response['data'] = LegalClientSerializer(item)
+                response['success'] = True
+            elif self.request.data['action'] == 'update':
+                params = self.request.data['params']
+                LegalClient.objects.filter(id=params['id']).update(
+                    name=params['name'],
+                    address=params['address'],
+                    phone_number=params['phone_number'],
+                    up_by=self.request.user
+                )
+                response['success'] = True
+            elif self.request.data['action'] == 'delete':
+                item_id = self.request.data['id']
+                LegalClient.objects.filter(id=item_id).update(
+                    up_by=self.request.user,
+                    is_exist=False
+                )
+                response['success'] = True
+        except Exception as e:
+            response['success'] = False
+            response['error_msg'] = str(e)
+        return Response(response)
+
 
 

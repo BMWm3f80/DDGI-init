@@ -98,10 +98,16 @@ class Group(models.Model):
     name = models.CharField(verbose_name="Наименование", max_length=255)
     is_exist = models.BooleanField(default=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Klass(models.Model):
     name = models.CharField(verbose_name="Наименование", max_length=255)
     is_exist = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Bank(models.Model):
@@ -113,15 +119,21 @@ class Bank(models.Model):
     checking_account = models.CharField(verbose_name="Расчётный счёт", max_length=30)
     is_exist = models.BooleanField(default=True)
 
+    def __str__(self):
+        return "{} {}".format(self.name, self.mfo)
+
 
 class Branch(models.Model):
     name = models.CharField(verbose_name="Наименование", max_length=255)
-    director = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    director = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='branch_director')
     cr_on = models.DateTimeField(auto_now_add=True)
-    cr_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    cr_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='branch_cr_by')
     up_on = models.DateTimeField(auto_now=True)
-    up_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    up_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='branch_up_by')
     is_exist = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Currency(models.Model):
@@ -157,9 +169,12 @@ class LegalClient(models.Model):
     phone_number = models.CharField(verbose_name="Номер телефона", max_length=15)
     cr_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     cr_on = models.DateTimeField(auto_now_add=True)
-    up_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    up_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='legal_client_up_by')
     up_on = models.DateTimeField(auto_now_add=True)
     is_exist = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
 
 
 class IndividualClient(models.Model):
@@ -170,9 +185,12 @@ class IndividualClient(models.Model):
     phone_number = models.CharField(verbose_name="Номер телефона", max_length=15)
     cr_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     cr_on = models.DateTimeField(auto_now_add=True)
-    up_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    up_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='individual_client_up_by')
     up_on = models.DateTimeField(auto_now_add=True)
     is_exist = models.BooleanField(default=True)
+
+    def __str__(self):
+        return "{} {}".format(self.first_name, self.last_name)
 
 #
 # class CompanyBankAccount(models.Model):
@@ -234,7 +252,7 @@ class RegisteredPolises(models.Model):
     polis_status = models.SmallIntegerField(verbose_name="Статус полиса")
     document = models.FileField(verbose_name="Документ", upload_to='registered_polis')
     cr_on = models.DateTimeField(auto_now_add=True)
-    cr_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    cr_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='polise_register_up_by')
     is_exist = models.BooleanField(default=True)
 
     class Meta:

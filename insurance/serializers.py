@@ -74,7 +74,6 @@ class PermissionUserSerializer(serializers.ModelSerializer):
         fields = ('permission_code', 'grant')
 
 
-
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Role
@@ -111,6 +110,12 @@ class IndividualClientSerializer(serializers.ModelSerializer):
         model = IndividualClient
         fields = ['id', 'first_name', 'last_name',
                   'middle_name', 'address', 'phone_number']
+
+
+class LegalClientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LegalClient
+        fields = ['id', 'name', 'address', 'phone_number']
 
 
 class RegisteredPoliseSerializer(serializers.ModelSerializer):

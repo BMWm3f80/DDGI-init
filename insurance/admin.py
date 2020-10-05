@@ -17,7 +17,6 @@ class UserRoleInline(admin.TabularInline):
     extra = 0
 
 
-
 class PermissionUserInline(admin.TabularInline):
     model = PermissionUser
     verbose_name_plural = 'Permissions'
@@ -147,3 +146,34 @@ class IndividualClientAdmin(admin.ModelAdmin):
 @admin.register(RegisteredPolises)
 class RegisteredPolises(admin.ModelAdmin):
     pass
+
+
+@admin.register(Group)
+class GroupAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Klass)
+class KlassAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Bank)
+class BankAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Branch)
+class BranchAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Currency)
+class CurrencyAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(LegalClient)
+class LegalClientAdmin(admin.ModelAdmin):
+    pass
+

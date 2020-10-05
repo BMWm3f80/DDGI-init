@@ -31,7 +31,7 @@ INSTALLED_APPS = [
     'insurance.apps.InsuranceConfig',
     'rest_framework',
     'corsheaders',
-    'autofixture',
+    #'autofixture',
     'rest_framework_datatables',
 
 ]
