@@ -14,7 +14,7 @@ SECRET_KEY = 'zdym8-!^1&)+($z+rkvh2t-(v0arp$9y3ni+zx6z_k2mubibwe'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '*']
+ALLOWED_HOSTS = ['127.0.0.1', '*', 'http://085c50e2d9a5.ngrok.io']
 
 
 # Application definition
@@ -54,7 +54,7 @@ CORS_ORIGIN_WHITELIST = [
     'https://localhost:3000',
     'http://127.0.0.1:3000',
     'https://127.0.0.1:3000',
-    'https://41de5a521e67.ngrok.io'
+    'http://085c50e2d9a5.ngrok.io'
     ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -142,7 +142,7 @@ USE_L10N = True
 USE_TZ = True
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=500),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,

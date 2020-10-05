@@ -23,7 +23,6 @@ class Profile(models.Model):
     image = models.ImageField(verbose_name='Фото', upload_to='users', null=True, blank=True)
     passport = models.CharField(verbose_name='Паспорт', max_length=50, null=True, blank=True)
 
-
     def __str__(self):
         return self.user.username
 
@@ -66,8 +65,6 @@ class UserRole(models.Model):
         return '{} - {}'.format(self.user.username, self.role.title)
 
 
-
-
 class PermissionRole(models.Model):
     role = models.ForeignKey(Role, on_delete=models.CASCADE)
     permission = models.ForeignKey(Permission, on_delete=models.CASCADE)
@@ -99,10 +96,12 @@ class Product(models.Model):
 
 class Group(models.Model):
     name = models.CharField(verbose_name="Наименование", max_length=255)
+    is_exist = models.BooleanField(default=True)
 
 
 class Klass(models.Model):
     name = models.CharField(verbose_name="Наименование", max_length=255)
+    is_exist = models.BooleanField(default=True)
 
 
 class Bank(models.Model):
@@ -112,16 +111,30 @@ class Bank(models.Model):
     address = models.CharField(verbose_name="Адрес", max_length=150)
     phone_number = models.CharField(verbose_name="Номер телефона", max_length=15)
     checking_account = models.CharField(verbose_name="Расчётный счёт", max_length=30)
+    is_exist = models.BooleanField(default=True)
 
 
 class Branch(models.Model):
     name = models.CharField(verbose_name="Наименование", max_length=255)
     director = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    cr_on = models.DateTimeField(auto_now_add=True)
+    cr_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    up_on = models.DateTimeField(auto_now=True)
+    up_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    is_exist = models.BooleanField(default=True)
 
 
 class Currency(models.Model):
     name = models.CharField(verbose_name="Наименование", max_length=50)
-    code = models.CharField(verbose_name="Код валюты", max_length=4)
+    code = models.CharField(verbose_name="Код валюты", max_length=4, unique=True)
+    is_exist = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = 'Валюта'
+        verbose_name_plural = 'Валюты'
+
+    def __str__(self):
+        return self.code
 
 
 class BasicTariffRate(models.Model):
@@ -142,6 +155,11 @@ class LegalClient(models.Model):
     name = models.CharField(verbose_name="Наименование", max_length=255)
     address = models.CharField(verbose_name="Адрес", max_length=150)
     phone_number = models.CharField(verbose_name="Номер телефона", max_length=15)
+    cr_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    cr_on = models.DateTimeField(auto_now_add=True)
+    up_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    up_on = models.DateTimeField(auto_now_add=True)
+    is_exist = models.BooleanField(default=True)
 
 
 class IndividualClient(models.Model):
@@ -150,6 +168,11 @@ class IndividualClient(models.Model):
     middle_name = models.CharField(verbose_name="Отчество", max_length=255)
     address = models.CharField(verbose_name="Адрес", max_length=150)
     phone_number = models.CharField(verbose_name="Номер телефона", max_length=15)
+    cr_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    cr_on = models.DateTimeField(auto_now_add=True)
+    up_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    up_on = models.DateTimeField(auto_now_add=True)
+    is_exist = models.BooleanField(default=True)
 
 #
 # class CompanyBankAccount(models.Model):
@@ -212,6 +235,7 @@ class RegisteredPolises(models.Model):
     document = models.FileField(verbose_name="Документ", upload_to='registered_polis')
     cr_on = models.DateTimeField(auto_now_add=True)
     cr_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    is_exist = models.BooleanField(default=True)
 
     class Meta:
         verbose_name_plural = 'Зарегистрированные полисы'

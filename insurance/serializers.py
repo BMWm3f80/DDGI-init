@@ -109,7 +109,8 @@ class DtOptionSerializer(serializers.ModelSerializer):
 class IndividualClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = IndividualClient
-        fields = '__all__'
+        fields = ['id', 'first_name', 'last_name',
+                  'middle_name', 'address', 'phone_number']
 
 
 class RegisteredPoliseSerializer(serializers.ModelSerializer):
@@ -118,6 +119,41 @@ class RegisteredPoliseSerializer(serializers.ModelSerializer):
         fields = ['id', 'act_number', 'act_date', 'polis_number_from',
                   'polis_number_to', 'polis_quantity', 'polis_status',
                   'document']
+
+
+class CurrencySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Currency
+        fields = ['id', 'name', 'code']
+
+
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['id', 'name']
+
+
+class KlassSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Klass
+        fields = ['id', 'name']
+
+
+class BankSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Bank
+        fields = ['id', 'name', 'mfo', 'inn',
+                  'address', 'phone_number', 'checking_account']
+
+
+class BranchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Branch
+        fields = ['id', 'name', 'director']
+
+
+
+
 
 
 
