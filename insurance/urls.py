@@ -17,8 +17,11 @@ router.register('registered-policies', viewset=views.RegisterPoliseViewSet)
 router.register('currency', viewset=views.CurrencyViewset)
 router.register('group', viewset=views.GroupViewset)
 router.register('klass', viewset=views.KlassViewset)
+router.register('vid', viewset=views.VidViewset)
 router.register('bank', viewset=views.BankViewset)
 router.register('branch', viewset=views.BranchViewSet)
+router.register('product', viewset=views.ProductViewSet)
+
 
 
 urlpatterns = [

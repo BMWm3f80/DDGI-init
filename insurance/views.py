@@ -25,17 +25,43 @@ class PositionsViewSet(viewsets.ModelViewSet):
     queryset = Position.objects.all()
     serializer_class = PositionSerializer
 
-    # def create(self, request, *args, **kwargs):
-    #     print("Create")
-    #     return Response(self.request.data)
-    #
-    # def update(self, request, *args, **kwargs):
-    #     print("update")
-    #     return Response(self.request.data)
-
-    # def destroy(self, request, *args, **kwargs):
-    #     print("DELETE")
-    #     return Response(self.request.data)
+    def create(self, request, *args, **kwargs):
+        response = {}
+        try:
+            if self.request.data['action'] == 'create':
+                params = self.request.data['params']
+                Position.objects.create(
+                    name=params['name']
+                ).save()
+                response['success'] = True
+            elif self.request.data['action'] == 'get':
+                item_id = self.request.data['id']
+                item = Position.objects.get(id=item_id)
+                serializer = PositionSerializer(item)
+                response['data'] = serializer.data
+                response['success'] = True
+            elif self.request.data['action'] == 'update':
+                params = self.request.data['params']
+                Position.objects.filter(id=params['id']).update(
+                    name=params['name']
+                )
+                response['success'] = True
+            elif self.request.data['action'] == 'delete':
+                params = self.request.data['params']
+                Position.objects.filter(id=params['id']).update(
+                    is_exist=True
+                )
+                response['success'] = True
+            elif self.request.data['action'] == 'list':
+                items = Position.objects.filter(is_exist=True)
+                serializer = PositionSerializer(items, many=True)
+                response['data'] = serializer.data
+                response['success'] = True
+        except Exception as e:
+            print(e)
+            response['success'] = False
+            response['error_msg'] = str(e)
+        return Response(response)
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
@@ -197,7 +223,7 @@ class CurrencyViewset(viewsets.ModelViewSet):
             print(e)
             response['success'] = False
             response['error_msg'] = str(e)
-        return  Response(response)
+        return Response(response)
 
 
 class GroupViewset(viewsets.ModelViewSet):
@@ -231,6 +257,11 @@ class GroupViewset(viewsets.ModelViewSet):
                 Group.objects.filter(id=item_id).update(
                     is_exist=False
                 )
+                response['success'] = True
+            elif self.request.data['action'] == 'list':
+                items = Group.objects.filter(is_exist=True)
+                serializer = GroupSerializer(items, many=True)
+                response['data'] = serializer.data
                 response['success'] = True
         except Exception as e:
             response['success'] = False
@@ -270,6 +301,49 @@ class KlassViewset(viewsets.ModelViewSet):
                     is_exist=False
                 )
                 response['success'] = True
+            elif self.request.data['action'] == 'list':
+                items = Klass.objects.filter(is_exist=True)
+                serializer = KlassSerializer(items)
+                response['data'] = serializer.data
+                response['success'] = True
+        except Exception as e:
+            response['success'] = False
+            response['error_msg'] = str(e)
+        return Response(response)
+
+
+class VidViewset(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, ]
+    queryset = Vid.objects.filter(is_exist=True)
+    serializer_class = VidSerializer
+
+    def create(self, request, *args, **kwargs):
+        response = {}
+        try:
+            if self.request.data['action'] == 'create':
+                params = self.request.data['params']
+                Vid.objects.create(
+                    name=params['name']
+                ).save()
+                response['success'] = True
+            elif self.request.data['action'] == 'get':
+                item_id = self.request.data['id']
+                item = Vid.objects.get(id=item_id)
+                serializer = VidSerializer(item)
+                response['data'] = serializer.data
+                response['success'] = True
+            elif self.request.data['action'] == 'update':
+                params = self.request.data['params']
+                Vid.objects.filter(id=params['id']).update(
+                    name=params['name']
+                )
+                response['success'] = True
+            elif self.request.data['action'] == 'delete':
+                item_id = self.request.data['id']
+                Vid.objects.filter(id=item_id).update(
+                    is_exixst=False
+                )
+
         except Exception as e:
             response['success'] = False
             response['error_msg'] = str(e)
@@ -411,6 +485,94 @@ class LegalClientViewSet(viewsets.ModelViewSet):
             response['success'] = False
             response['error_msg'] = str(e)
         return Response(response)
+
+
+class ProductViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, ]
+    queryset = Product.objects.filter(is_exist=True)
+    serializer_class = ProductSerializer
+
+    def create(self, request, *args, **kwargs):
+        response = {}
+        try:
+            if self.request.data['action'] == 'create':
+                params = self.request.data['params']
+                klass = Klass.objects.get(id=params['klass'])
+                group = Group.objects.get(id=params['klass'])
+                vid = Vid.objects.get(id=params['vid'])
+                new_product = Product.objects.create(
+                    name=params['name'],
+                    klass=klass,
+                    group=group,
+                    vid=vid
+                ).save()
+                fields = self.request.data['params']['fields']
+                for f in fields:
+                    ProductField.objects.create(
+                        product=new_product,
+                        type=f['type'],
+                        name=f['name'],
+                        value=f['value'],
+                        order=f['order']
+                    ).save()
+                response['success'] = True
+            elif self.request.data['action'] == 'update':
+                params = self.request.data['params']
+                klass = Klass.objects.get(id=params['klass'])
+                group = Group.objects.get(id=params['group'])
+                vid = Vid.objects.get(id=params['vid'])
+                Product.objects.filter(id=params['id']).update(
+                    klass=klass,
+                    group=group,
+                    vid=vid
+                )
+                response['success'] = True
+            elif self.request.data['action'] == 'get':
+                item_id = self.request.data['id']
+                product = Product.objects.get(id=item_id)
+                product_fields = ProductField.objects.get(product=product)
+                product_serializer = ProductSerializer(product)
+                product_field_serializer = ProductFieldSerializer(product_fields, many=True)
+                response['data']['product'] = product_serializer.data
+                response['data']['product_fields'] = product_field_serializer.data
+                response['success'] = True
+            elif self.request.data['action'] == 'delete':
+                item_id = self.request.data['id']
+                Product.objects.filter(id=item_id).update(
+                    is_exist = False
+                )
+        except Exception as e:
+            response['success'] = False
+            response['error_msg'] = str(e)
+        return Response(response)
+
+
+class ActViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, ]
+    queryset = Act.objects.filter(is_exist=True)
+    serializer_class = ActFieldsSerializer
+
+    def create(self, request, *args, **kwargs):
+        response = {}
+        try:
+            if self.request.data['action'] == 'create':
+                pass
+                #params = dict(self.request.data['params'])
+                #if ''
+                #new_act = Act.objects.create(
+
+                #)
+
+        except Exception as e:
+            response['success'] = False
+            response['error_msg'] = str(e)
+        return Response(response)
+
+
+
+
+
+
 
 
 

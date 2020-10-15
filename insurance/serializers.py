@@ -36,7 +36,7 @@ class UserRoleSerializer(serializers.ModelSerializer):
 class PositionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Position
-        fields = '__all__'
+        fields = ['id', 'name']
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -156,6 +156,71 @@ class BranchSerializer(serializers.ModelSerializer):
         model = Branch
         fields = ['id', 'name', 'director']
 
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['id', 'name']
+
+
+class ProductFieldSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductField
+        fields = ['id', 'product', 'type', 'name', 'value', 'order']
+
+
+class RegionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Region
+        fields = ['id', 'name']
+
+
+class DistrictSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = District
+        fields = ['id', 'region', 'name']
+
+
+class VidSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vid
+        fields = ['id', 'name']
+
+
+class BeneficiarySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Beneficiary
+        fields = ['id', 'first_name', 'last_name', 'middle_name',
+                  'address', 'fax_number', 'checking_number',
+                  'bank_name', 'inn', 'mfo']
+
+
+class Insurer(serializers.ModelSerializer):
+    class Meta:
+        model = Insurer
+        fields = ['id', 'first_name', 'last_name', 'middle_name', 'address',
+                  'phone_number', 'fax_number', 'checking_account', 'bank_name', 'inn', 'mfo']
+
+
+class PledgerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Pledger
+        fields = ['id', 'first_name', 'last_name', 'middle_name', 'address', 'phone_number',
+                  'fax_number', 'checking_account', 'bank_name', 'inn', 'mfo']
+
+
+class Act(serializers.ModelSerializer):
+    class Meta:
+        model = Act
+        fields = ['id', 'client_type', 'date_from', 'date_to',
+                  'insurance', 'goal', 'zone', 'is_damaged',
+                  'is_insured', 'risk']
+
+
+class ActFieldsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ActFields
+        fields = ['id', 'product', 'order', 'name', 'value']
 
 
 

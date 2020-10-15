@@ -6,6 +6,7 @@ from django.db.models.signals import post_save
 
 class Position(models.Model):
     name = models.CharField(verbose_name='Имя', max_length=50)
+    is_exist = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = 'Должность'
@@ -90,10 +91,6 @@ class ClientPhysical(models.Model):
     middlename = models.CharField(verbose_name="Отчество", max_length=50)
 
 
-class Product(models.Model):
-    name = models.CharField(verbose_name="Наименование", max_length=255)
-
-
 class Group(models.Model):
     name = models.CharField(verbose_name="Наименование", max_length=255)
     is_exist = models.BooleanField(default=True)
@@ -108,6 +105,22 @@ class Klass(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Vid(models.Model):
+    name = models.CharField(max_length=256)
+    is_exist = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Product(models.Model):
+    name = models.CharField(verbose_name="Наименование", max_length=255)
+    klass = models.ForeignKey(Klass, on_delete=models.CASCADE, null=True)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, null=True)
+    vid = models.ForeignKey(Vid, on_delete=models.CASCADE, null=True)
+    is_exist = models.BooleanField(default=True)
 
 
 class Bank(models.Model):
@@ -155,7 +168,18 @@ class BasicTariffRate(models.Model):
 
 
 class Beneficiary(models.Model):
-    name = models.CharField(verbose_name="Наименование", max_length=255)
+    first_name = models.CharField(max_length=64, null=True)
+    last_name = models.CharField(max_length=64, null=True)
+    middle_name = models.CharField(max_length=64, null=True)
+    address = models.CharField(max_length=1024, null=True)
+    fax_number = models.CharField(max_length=64, null=True)
+    checking_account = models.CharField(max_length=64, null=True)
+    bank_name = models.CharField(max_length=128, null=True)
+    inn = models.CharField(max_length=20, null=True)
+    mfo = models.CharField(max_length=6, null=True)
+
+    def __str__(self):
+        return self.first_name
 
 
 class InsurancePeriod(models.Model):
@@ -332,3 +356,94 @@ class GridCols(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class ProductField(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    type = models.CharField(max_length=128)
+    name = models.CharField(max_length=128)
+    value = models.CharField(max_length=4096)
+    order = models.IntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Region(models.Model):
+    name = models.CharField(max_length=512)
+    is_exist = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
+
+
+class District(models.Model):
+    region = models.ForeignKey(Region, on_delete=models.CASCADE)
+    name = models.CharField(max_length=128)
+    is_exist = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Insurer(models.Model):
+    first_name = models.CharField(max_length=64)
+    last_name = models.CharField(max_length=64)
+    middle_name = models.CharField(max_length=64)
+    address = models.CharField(max_length=1024)
+    phone_number = models.CharField(max_length=17)
+    fax_number = models.CharField(max_length=32)
+    checking_account = models.CharField(max_length=32)
+    bank_name = models.CharField(max_length=256, null=True)
+    inn = models.CharField(max_length=20, null=True)
+    mfo = models.CharField(max_length=6, null=True)
+
+    def __str__(self):
+        return "{} {}".format(self.first_name, self.last_name)
+
+
+class Pledger(models.Model):
+    first_name = models.CharField(max_length=64, null=True)
+    last_name = models.CharField(max_length=64)
+    middle_name = models.CharField(max_length=64)
+    address = models.CharField(max_length=1024)
+    phone_number = models.CharField(max_length=17)
+    fax_number = models.CharField(max_length=32)
+    checking_account = models.CharField(max_length=32)
+    bank_name = models.CharField(max_length=256, null=True)
+    inn = models.CharField(max_length=20, null=True)
+    mfo = models.CharField(max_length=6, null=True)
+
+    def __str__(self):
+        return self.first_name
+
+
+class Act(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)
+    client_type = models.CharField(max_length=64, null=True, blank=True)
+    date_from = models.DateField(null=True, blank=True)
+    date_to = models.DateField(null=True, blank=True)
+    insurance_agreement = models.CharField(max_length=128)
+    goal = models.CharField(max_length=2048, null=True, blank=True)
+    zone = models.CharField(max_length=256, null=True, blank=True)
+    is_damaged = models.BooleanField(null=True)
+    is_insured = models.BooleanField(null=True)
+    risk = models.IntegerField(null=True)
+    insurer = models.ForeignKey(Insurer, on_delete=models.SET_NULL, null=True)
+    beneficiary = models.ForeignKey(Beneficiary, on_delete=models.SET_NULL, null=True)
+    pledger = models.ForeignKey(Pledger, on_delete=models.SET_NULL, null=True)
+    is_exist = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.product.name
+
+
+class ActFields(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    order = models.IntegerField(null=True)
+    name = models.CharField(max_length=128, null=True)
+    value = models.CharField(max_length=4096, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+

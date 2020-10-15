@@ -177,3 +177,15 @@ class CurrencyAdmin(admin.ModelAdmin):
 class LegalClientAdmin(admin.ModelAdmin):
     pass
 
+
+class ProductFieldInline(admin.TabularInline):
+    model = ProductField
+    extra = 0
+    fields = ('type', 'name', 'value', 'order')
+
+
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'klass', 'group', 'vid')
+    inlines = [ProductFieldInline]
+
